@@ -12,8 +12,13 @@ export default function ChatScreen({ route }) {
       .doc(route.params.chatid)
       .onSnapshot((snapshot) => {
         console.log("New Snapshot!");
-        setMessages(snapshot.data().messages);
+        let newMessages = snapshot.data().messages.map((singleMessage) => {
+          singleMessage.createdAt = singleMessage.createdAt.seconds * 1000;
+          return singleMessage;
+        });
+        setMessages(newMessages);
       });
+      
 
     return function cleanupBeforeUnmounting() {
       unsubscribeFromNewSnapshots();
@@ -42,7 +47,7 @@ export default function ChatScreen({ route }) {
         name: "Ashwin",
         avatar: "https://placeimg.com/140/140/any",
       }}
-      inverted={true}
+      inverted={false}
       showUserAvatar={true}
       renderUsernameOnMessage={true}
     />

@@ -43,7 +43,7 @@ export default function SignupScreen({ navigation }) {
       <Text style={styles.title}>Email:</Text>
       <TextInput style={styles.nameInput} onChangeText={setEmail} />
       <Text style={styles.title}>Password (6+ characters):</Text>
-      <TextInput style={styles.nameInput} onChangeText={setPassword} />
+      <TextInput style={styles.nameInput} onChangeText={setPassword} secureTextEntry={true} />
       <Text style={styles.title}>Name:</Text>
       <TextInput style={styles.nameInput} onChangeText={setName} />
 
