@@ -3,7 +3,7 @@ import { GiftedChat } from "react-native-gifted-chat";
 import db from "./firebase";
 import firebase from "firebase/app";
 
-export default function App() {
+export default function ChatScreen({ navigation }) {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function App() {
       user={{
         // current "blue bubble" user
         _id: "1",
-        name: "JayTee",
+        name: "Ashwin",
         avatar: "https://placeimg.com/140/140/any",
       }}
       inverted={true}
