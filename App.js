@@ -12,6 +12,15 @@ import firebase from "@firebase/app";
 const Stack = createStackNavigator();
 
 function App() {
+  const [isSignedIn, setIsSignedIn] = useState(
+    firebase.auth().currentUser ? true : false
+  );
+
+  useEffect(() => {
+    return firebase.auth().onAuthStateChanged((user) => {
+      setIsSignedIn(user ? true : false)
+    });
+  }, [])
   return (
     <View style={styles.container}>
       <NavigationContainer>
