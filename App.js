@@ -1,51 +1,50 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect, useCallback } from 'react';
-import { GiftedChat } from 'react-native-gifted-chat'
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useCallback, useEffect } from "react";
+import { GiftedChat } from "react-native-gifted-chat";
+import db from "./firebase";
+import firebase from "firebase/app";
 
 export default function App() {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ])
-  }, [])
+    let unsubscribeFromNewSnapshots = db
+      .collection("Chats")
+      .doc("myfirstchat")
+      .onSnapshot((snapshot) => {
+        console.log("New Snapshot!");
+        setMessages(snapshot.data().messages);
+      });
+
+    return function cleanupBeforeUnmounting() {
+      unsubscribeFromNewSnapshots();
+    };
+  }, []);
 
   const onSend = useCallback((messages = []) => {
-    setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
-  }, [])
+    db.collection("Chats")
+      .doc("myfirstchat")
+      .update({
+        // arrayUnion appends the message to the existing array
+        messages: firebase.firestore.FieldValue.arrayUnion(messages[0]),
+      });
+    setMessages((previousMessages) =>
+      GiftedChat.append(previousMessages, messages)
+    );
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-      <GiftedChat
+    <GiftedChat
       messages={messages}
-      placeholder='Hello World'
-      onSend={messages => onSend(messages)}
+      onSend={(messages) => onSend(messages)}
       user={{
-        _id: 1,
+        // current "blue bubble" user
+        _id: "1",
+        name: "Ashwin",
+        avatar: "https://placeimg.com/140/140/any",
       }}
+      inverted={true}
+      showUserAvatar={true}
+      renderUsernameOnMessage={true}
     />
-    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
