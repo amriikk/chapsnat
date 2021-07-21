@@ -1,17 +1,24 @@
 import firebase from "@firebase/app";
 import React, { useState } from "react";
-import Colors from "../constants/colors";
+import Colors from "../constants/Colors";
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 export default function ProfileScreen() {
+  var user = firebase.auth().currentUser;
 
   const onPressLogout = async () => {
-    firebase.auth().signOut().then(() => {
-      // Sign-out successful.
-    }).catch((error) => {
-      // An error happened.
-  });
-
+    await firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        // Sign-out successful.
+        console.log("Signed out!");
+      })
+      .catch((error) => {
+        // An error happened.
+        alert(error.message);
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -19,11 +26,9 @@ export default function ProfileScreen() {
         <TouchableOpacity onPress={() => alert("edit!")}>
           <Image style={styles.userImage} source={{}} />
         </TouchableOpacity>
-        <Text style={styles.userNameText}>
-          Name
-        </Text>
+        <Text style={styles.userNameText}>{user.displayName}</Text>
         <View style={styles.Row}>
-          <Text style={styles.descriptionText}>Los Angeles, California</Text>
+          <Text style={styles.descriptionText}>{user.email}</Text>
         </View>
       </View>
       <View style={styles.Row}>
@@ -37,6 +42,7 @@ export default function ProfileScreen() {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -50,6 +56,7 @@ const styles = StyleSheet.create({
   Row: {
     alignItems: "center",
     flexDirection: "row",
+    justifyContent: "center",
   },
   descriptionText: {
     color: "#A5A5A5",
