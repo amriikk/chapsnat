@@ -2,8 +2,17 @@ import firebase from "@firebase/app";
 import React, { useState } from "react";
 import Colors from "../constants/colors";
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+
 export default function ProfileScreen() {
-  const onPressLogout = () => {};
+
+  const onPressLogout = async () => {
+    firebase.auth().signOut().then(() => {
+      // Sign-out successful.
+    }).catch((error) => {
+      // An error happened.
+  });
+
+
   return (
     <View style={styles.container}>
       <View style={styles.headerColumn}>
