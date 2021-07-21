@@ -43,8 +43,8 @@ export default function ChatScreen({ route }) {
       onSend={(messages) => onSend(messages)}
       user={{
         // current "blue bubble" user
-        _id: "1",
-        name: "Ashwin",
+        _id: firebase.auth().currentUser.uid,
+        name: firebase.auth().currentUser.displayName,
         avatar: "https://placeimg.com/140/140/any",
       }}
       inverted={false}

@@ -16,13 +16,8 @@ export default function SignupScreen({ navigation }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const onPressCreate = async () => {
-    const user = {
-      name: name,
-      email: email,
-      password: password,
-    };
 
+  const onPressCreate = async () => {
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -32,6 +27,10 @@ export default function SignupScreen({ navigation }) {
   const onSuccess = async () => {
     //Signed in
     alert("Account created! Please log in.");
+    var curr_user = userCredential.user;
+    curr_user.updateProfile({
+      displayName: name,
+    });
   };
 
   const onFailure = async () => {
